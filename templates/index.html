@@ -14,7 +14,9 @@
           <span class="brand-mark" aria-hidden="true">✳</span>
           好好生活 <span class="brand-en">WELL LIVING</span>
         </a>
-        <span class="header-note">把健康，從了解自己開始。</span>
+        <nav class="site-nav" aria-label="主要導覽">
+          <a href="{{ url_for('users') }}">所有使用者</a>
+        </nav>
       </header>
 
       <main>
@@ -22,7 +24,7 @@
           <div class="hero-copy">
             <span class="eyebrow"><span class="eyebrow-dot"></span> YOUR HEALTH, YOUR PACE</span>
             <h1 id="page-title">了解自己的<br><em>健康狀況。</em></h1>
-            <p class="intro">輸入身高與體重，快速算出 BMI，找到適合自己的健康生活方向。</p>
+            <p class="intro">輸入姓名、身高與體重，快速算出 BMI，找到適合自己的健康生活方向。</p>
 
             <div class="calculator">
               <div class="card-heading">
@@ -35,6 +37,11 @@
 
               <form method="post" action="{{ url_for('index') }}" novalidate>
                 <div class="form-fields">
+                  <div class="field field-name">
+                    <label for="name">姓名 <span>NAME</span></label>
+                    <input id="name" name="name" type="text" autocomplete="name" maxlength="100" placeholder="例如 王小明" value="{{ name_input }}" required {% if errors.name %}aria-invalid="true" aria-describedby="name-error"{% endif %}>
+                    {% if errors.name %}<p class="field-error" id="name-error">{{ errors.name }}</p>{% endif %}
+                  </div>
                   <div class="field">
                     <label for="height">身高 <span>HEIGHT</span></label>
                     <div class="input-wrap">
@@ -66,6 +73,7 @@
                   <span class="result-unit">BMI</span>
                 </div>
                 <div class="result-divider"></div>
+                {% if result.name %}<p class="result-name">姓名：<strong>{{ result.name }}</strong></p>{% endif %}
                 <span class="result-label">你的體位屬於 <strong>{{ result.label }}</strong></span>
                 <h2 id="result-title">給你的健康建議</h2>
                 <p>{{ result.advice }}</p>
