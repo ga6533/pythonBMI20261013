@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>所有使用者 · BMI 計算器</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <div class="page">
+      <header class="site-header">
+        <a class="brand" href="{{ url_for('index') }}" aria-label="好好生活，回到首頁">
+          <span class="brand-mark" aria-hidden="true">✳</span>
+          好好生活 <span class="brand-en">WELL LIVING</span>
+        </a>
+        <nav class="site-nav" aria-label="主要導覽"><a href="{{ url_for('index') }}">BMI 計算器</a></nav>
+      </header>
+      <main class="history-page">
+        <span class="eyebrow"><span class="eyebrow-dot"></span> USER HISTORY</span>
+        <h1>所有使用者</h1>
+        {% if missing_name %}
+          <p class="history-intro">找不到「{{ missing_name }}」的 BMI 紀錄。</p>
+        {% elif users %}
+          <p class="history-intro">點選姓名即可查看該使用者歷次的 BMI 數值與計算時間。</p>
+          <div class="user-list">
+            {% for user in users %}
+              <a class="user-card" href="{{ url_for('user_history', name=user.name) }}">
+                <span>{{ user.name }}</span>
+                <span class="user-meta">{{ user.record_count }} 次紀錄 · 最近 {{ user.latest_at }}</span>
+              </a>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="empty-state">目前還沒有 BMI 計算紀錄。</p>
+        {% endif %}
+        <a class="back-link" href="{{ url_for('index') }}">← 回到 BMI 計算器</a>
+      </main>
+      <footer>© 好好生活 <span>TAKE CARE, EVERY DAY.</span></footer>
+    </div>
+  </body>
+</html>
