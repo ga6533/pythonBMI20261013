@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ name }}的 BMI 歷史 · BMI 計算器</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <div class="page">
+      <header class="site-header">
+        <a class="brand" href="{{ url_for('index') }}" aria-label="好好生活，回到首頁">
+          <span class="brand-mark" aria-hidden="true">✳</span>
+          好好生活 <span class="brand-en">WELL LIVING</span>
+        </a>
+        <nav class="site-nav" aria-label="主要導覽"><a href="{{ url_for('users') }}">所有使用者</a></nav>
+      </header>
+      <main class="history-page">
+        <span class="eyebrow"><span class="eyebrow-dot"></span> BMI HISTORY</span>
+        <h1>{{ name }}的 BMI 歷史</h1>
+        <p class="history-intro">以下是此使用者歷次的 BMI 計算結果。</p>
+        <div class="history-list">
+          {% for record in records %}
+            <div class="history-card">
+              <span class="history-bmi">{{ "%.1f"|format(record.bmi) }} <small>BMI</small></span>
+              <span class="history-time">計算時間：{{ record.calculated_at }}</span>
+            </div>
+          {% endfor %}
+        </div>
+        <a class="back-link" href="{{ url_for('users') }}">← 回到所有使用者</a>
+      </main>
+      <footer>© 好好生活 <span>TAKE CARE, EVERY DAY.</span></footer>
+    </div>
+  </body>
+</html>
