@@ -68,7 +68,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Verify Windows Web App and test slot
+      - name: Verify Windows Web App and create test slot
         shell: pwsh
         run: |
           $platform = az webapp show --resource-group $env:AZURE_RESOURCE_GROUP --name $env:AZURE_WEBAPP_NAME --query reserved --output tsv
@@ -80,7 +80,15 @@ jobs:
             --name $env:AZURE_WEBAPP_NAME `
             --slot $env:AZURE_SLOT_NAME `
             --output none
-          if ($LASTEXITCODE -ne 0) { throw "Azure Web App slot '$env:AZURE_SLOT_NAME' was not found" }
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "Azure Web App slot '$env:AZURE_SLOT_NAME' was not found. Creating it now."
+            az webapp deployment slot create `
+              --resource-group $env:AZURE_RESOURCE_GROUP `
+              --name $env:AZURE_WEBAPP_NAME `
+              --slot $env:AZURE_SLOT_NAME `
+              --output none
+            if ($LASTEXITCODE -ne 0) { throw "Azure Web App slot '$env:AZURE_SLOT_NAME' could not be created" }
+          }
 
       - name: Deploy to Azure Web App test slot
         uses: azure/webapps-deploy@v3
