@@ -1,4 +1,4 @@
-name: Deploy BMI to Azure Test Slot
+111name: Deploy BMI to Azure Test Slot
 
 on:
   push:
